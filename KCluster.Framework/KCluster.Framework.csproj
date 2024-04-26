@@ -9,6 +9,7 @@
 		<Authors>KCluster</Authors>
 		<Company>KCluster</Company>
 		<Description>Re-useable tested codes</Description>
+		<RepositoryUrl>https://github.com/Khairul-Anam-Mubin/KCluster.Framework</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
