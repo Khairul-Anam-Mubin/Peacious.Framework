@@ -8,10 +8,14 @@
 		<PackageId>KCluster.Framework</PackageId>
 		<Authors>KCluster</Authors>
 		<Company>KCluster</Company>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Description>Re-useable tested codes</Description>
 		<RepositoryUrl>https://github.com/Khairul-Anam-Mubin/KCluster.Framework</RepositoryUrl>
 	</PropertyGroup>
-
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.1.28" />
 		<PackageReference Include="MassTransit" Version="8.1.3" />
