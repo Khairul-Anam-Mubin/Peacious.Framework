@@ -7,7 +7,7 @@ namespace Peacious.Framework.CQRS;
 public abstract class AQueryConsumer<TQuery, TResponse> :
     AMessageConsumer<TQuery>,
     IQueryHandler<TQuery, TResponse>
-    where TQuery : class, IQuery, IInternalMessage
+    where TQuery : class, IQuery<TResponse>, IInternalMessage
     where TResponse : class
 {
     protected readonly IScopeIdentity ScopeIdentity;
@@ -29,6 +29,11 @@ public abstract class AQueryConsumer<TQuery, TResponse> :
     }
 
     public async Task<IResult<TResponse>> HandleAsync(TQuery request)
+    {
+        return await OnConsumeAsync(request);
+    }
+
+    public async Task<IResult<TResponse>> Handle(TQuery request, CancellationToken cancellationToken)
     {
         return await OnConsumeAsync(request);
     }

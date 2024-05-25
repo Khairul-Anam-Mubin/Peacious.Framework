@@ -7,7 +7,7 @@ namespace Peacious.Framework.CQRS;
 public abstract class ACommandConsumer<TCommand, TResponse> :
     AMessageConsumer<TCommand>,
     ICommandHandler<TCommand, TResponse>
-    where TCommand : class, ICommand, IInternalMessage
+    where TCommand : class, ICommand<TResponse>, IInternalMessage
     where TResponse : class
 {
     protected readonly IScopeIdentity ScopeIdentity;
@@ -27,6 +27,11 @@ public abstract class ACommandConsumer<TCommand, TResponse> :
     }
 
     public async Task<IResult<TResponse>> HandleAsync(TCommand request)
+    {
+        return await OnConsumeAsync(request);
+    }
+
+    public async Task<IResult<TResponse>> Handle(TCommand request, CancellationToken cancellationToken)
     {
         return await OnConsumeAsync(request);
     }
@@ -54,6 +59,11 @@ public abstract class ACommandConsumer<TCommand> :
     }
 
     public async Task<IResult> HandleAsync(TCommand request)
+    {
+        return await OnConsumeAsync(request);
+    }
+
+    public async Task<IResult> Handle(TCommand request, CancellationToken cancellationToken)
     {
         return await OnConsumeAsync(request);
     }

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Peacious.Framework.Mediators;
 
 namespace Peacious.Framework.EDD;
 
@@ -14,6 +14,6 @@ public class EventExecutor : IEventExecutor
     public async Task PublishAsync<TEvent>(TEvent @event)
         where TEvent : class, IEvent
     {
-        await _mediator.Publish(@event);
+        await _mediator.PublishAsync(@event);
     }
 }

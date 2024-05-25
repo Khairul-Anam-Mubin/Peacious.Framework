@@ -1,13 +1,19 @@
 namespace Peacious.Framework.Mediators;
 
-public interface IHandler { }
+public interface IRequest : MediatR.IRequest { }
 
-public interface IHandler<in TRequest> : IHandler
-{
-    Task HandleAsync(TRequest request);
-}
+public interface IRequest<TResponse> : MediatR.IRequest<TResponse> 
+    where TResponse : class {}
 
-public interface IHandler<in TRequest, TResponse> : IHandler
-{
-    Task<TResponse> HandleAsync(TRequest request);
-}
+public interface INotification : MediatR.INotification { }
+
+public interface IHandler<in TRequest> : MediatR.IRequestHandler<TRequest> 
+    where TRequest : class, IRequest {}
+
+public interface IHandler<in TRequest, TResponse> : MediatR.IRequestHandler<TRequest, TResponse> 
+    where TRequest : class, IRequest<TResponse>
+    where TResponse : class {}
+
+public interface INotificationHandler<TNotificaiton> : MediatR.INotificationHandler<TNotificaiton> 
+    where TNotificaiton : class, INotification
+{ }

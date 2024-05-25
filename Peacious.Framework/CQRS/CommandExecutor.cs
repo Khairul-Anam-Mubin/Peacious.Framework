@@ -25,7 +25,7 @@ public class CommandExecutor : ICommandExecutor
 
         try
         {
-            var result = await _mediator.SendAsync<TCommand, IResult>(command);
+            var result = await _mediator.SendAsync(command);
 
             return result;
         }
@@ -38,7 +38,7 @@ public class CommandExecutor : ICommandExecutor
     }
 
     public async Task<IResult<TResponse>> ExecuteAsync<TCommand, TResponse>(TCommand command)
-        where TCommand : class, ICommand
+        where TCommand : class, ICommand<TResponse>
         where TResponse : class
     {
         var validationResult = command.GetValidationResult<TResponse>();
@@ -50,7 +50,7 @@ public class CommandExecutor : ICommandExecutor
 
         try
         {
-            var result = await _mediator.SendAsync<TCommand, IResult<TResponse>>(command);
+            var result = await _mediator.SendAsync(command);
 
             return result;
         }

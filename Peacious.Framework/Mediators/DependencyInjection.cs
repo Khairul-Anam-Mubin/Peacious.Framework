@@ -11,6 +11,13 @@ public static class DependencyInjection
 
     public static IServiceCollection AddMediator(this IServiceCollection services)
     {
+        services.AddMediatR(cfg =>
+        {
+            AssemblyCache.Instance.GetAddedAssemblies()
+            .ForEach(
+                assembly => cfg.RegisterServicesFromAssembly(assembly));
+        });
+
         return services.AddTransient<IMediator, Mediator>();
     }
 

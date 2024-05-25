@@ -25,7 +25,7 @@ public class QueryService : IQueryService
     }
 
     public async Task<IResult<TResponse>> ExecuteAsync<TQuery, TResponse>(TQuery query)
-        where TQuery : class, IQuery
+        where TQuery : class, IQuery<TResponse>
         where TResponse : class
     {
         return await _queryExecutor.ExecuteAsync<TQuery, TResponse>(query);

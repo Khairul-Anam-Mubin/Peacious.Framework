@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Peacious.Framework.Mediators;
 
 namespace Peacious.Framework.EDD;
 

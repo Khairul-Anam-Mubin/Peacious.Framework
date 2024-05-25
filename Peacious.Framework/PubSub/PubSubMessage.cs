@@ -1,8 +1,9 @@
 ﻿using Peacious.Framework.CQRS;
+using Peacious.Framework.Mediators;
 
 namespace Peacious.Framework.PubSub;
 
-public class PubSubMessage : IInternalMessage
+public class PubSubMessage : IRequest, IInternalMessage
 {
     public string Id { get; set; } = string.Empty;
     public MessageType MessageType { get; set; }

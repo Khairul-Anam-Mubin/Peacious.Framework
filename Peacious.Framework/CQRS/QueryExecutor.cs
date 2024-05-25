@@ -14,7 +14,7 @@ public class QueryExecutor : IQueryExecutor
     }
 
     public async Task<IResult<TResponse>> ExecuteAsync<TQuery, TResponse>(TQuery query)
-        where TQuery : class, IQuery
+        where TQuery : class, IQuery<TResponse>
         where TResponse : class
     {
         var validationResult = query.GetValidationResult<TResponse>();
@@ -26,7 +26,7 @@ public class QueryExecutor : IQueryExecutor
 
         try
         {
-            var response = await _mediator.SendAsync<TQuery, IResult<TResponse>>(query);
+            var response = await _mediator.SendAsync(query);
 
             return response;
         }

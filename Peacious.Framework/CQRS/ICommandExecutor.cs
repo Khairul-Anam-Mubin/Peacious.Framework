@@ -8,6 +8,6 @@ public interface ICommandExecutor
         where TCommand : class, ICommand;
 
     Task<IResult<TResponse>> ExecuteAsync<TCommand, TResponse>(TCommand command)
-        where TCommand : class, ICommand
+        where TCommand : class, ICommand<TResponse>
         where TResponse : class;
 }
