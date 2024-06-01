@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2.0.0</Version>
+		<Version>2.1.1</Version>
 		<PackageId>Peacious.Framework</PackageId>
 		<Authors>Khairul Anam Mubin</Authors>
 		<Company>Khairul Anam Mubin</Company>
