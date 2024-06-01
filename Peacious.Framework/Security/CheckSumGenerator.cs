@@ -18,22 +18,17 @@ public class CheckSumGenerator
 
     public static string GetCheckSum(params string[] inputs)
     {
-        var inputList = inputs.ToList();
+        if (inputs.Length == 0) return string.Empty;
 
-        if (!inputList.Any())
+        Array.Sort(inputs);
+
+        var stringBuilder = new StringBuilder();
+
+        foreach (var input in inputs)
         {
-            return string.Empty;
+            stringBuilder.Append(input);
         }
 
-        inputList.Sort();
-
-        var concatenatedInput = string.Empty;
-
-        inputList.ForEach(input =>
-        {
-            concatenatedInput += input;
-        });
-
-        return GetCheckSum(concatenatedInput);
+        return GetCheckSum(stringBuilder.ToString());
     }
 }

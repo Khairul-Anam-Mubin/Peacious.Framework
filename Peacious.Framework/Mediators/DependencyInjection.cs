@@ -9,11 +9,11 @@ public static class DependencyInjection
 {
     private static readonly List<Type> HandlerTypes = new() { typeof(IHandler<,>), typeof(IHandler<>) };
 
-    public static IServiceCollection AddMediator(this IServiceCollection services)
+    public static IServiceCollection AddMediator(this IServiceCollection services, List<Assembly> assemblies)
     {
         services.AddMediatR(cfg =>
         {
-            AssemblyCache.Instance.GetAddedAssemblies()
+            assemblies
             .ForEach(
                 assembly => cfg.RegisterServicesFromAssembly(assembly));
         });

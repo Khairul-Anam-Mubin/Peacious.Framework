@@ -1,24 +1,24 @@
 ﻿using MassTransit;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Peacious.Framework.Extensions;
+using System.Reflection;
 
 namespace Peacious.Framework.MessageBrokers;
 
 public static class RabbitMqDependencyInjection
 {
-    public static IServiceCollection AddRabbitMqMassTransit(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddRabbitMqMassTransit(this IServiceCollection services, MessageBrokerConfig messageBrokerConfig, List<Assembly> assemblies)
     {
         services.AddTransient<IEventBus, EventBus>();
         services.AddTransient<ICommandBus, CommandBus>();
         services.AddTransient<IMessageRequestClient, MessageRequestClient>();
 
-        services.AddSingleton(configuration.TryGetConfig<MessageBrokerConfig>("MessageBrokerConfig"));
+        services.AddSingleton(messageBrokerConfig);
+        
         services.AddMassTransit(busConfigurator =>
         {
             busConfigurator.SetDefaultEndpointNameFormatter();
 
-            AssemblyCache.Instance.GetAddedAssemblies().ForEach(assembly =>
+            assemblies.ForEach(assembly =>
                 busConfigurator.AddConsumers(assembly));
 
             busConfigurator.UsingRabbitMq((context, configurator) =>
