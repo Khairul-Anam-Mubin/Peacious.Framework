@@ -2,71 +2,47 @@
 using Microsoft.Extensions.Configuration;
 using Peacious.Framework.Extensions;
 using Peacious.Framework.ServiceInstaller;
+using System.Reflection;
 
 namespace Peacious.Framework.Extensions;
 
 public static class WebApplicationBuilderExtension
 {
-    public static WebApplicationBuilder AddGlobalConfig(this WebApplicationBuilder builder, string globalConfigPath = "")
+    public static WebApplicationBuilder AddGlobalConfig(this WebApplicationBuilder builder, string globalConfigPath)
     {
-        var configuration = builder.Configuration;
-
-        var configPath = configuration["GlobalConfigPath"];
-
-        if (!string.IsNullOrEmpty(globalConfigPath))
+        if (string.IsNullOrEmpty(globalConfigPath))
         {
-            configPath = globalConfigPath;
+            throw new Exception("Global Config Path not found");
         }
 
-        if (string.IsNullOrEmpty(configPath))
-        {
-            throw new Exception("Config Path Not Found");
-        }
-
-        try
-        {
-            configuration.AddJsonFile(configPath, false, true);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            Console.WriteLine("Continuing with GlobalConfig Service");
-        }
-
-        var configText = File.ReadAllText(configPath);
-
-        if (string.IsNullOrEmpty(configText))
-        {
-            throw new Exception("File is empty");
-        }
-
-        var configDictionary = configText.Deserialize<Dictionary<string, object>>();
-
-        if (configDictionary == null)
-        {
-            throw new Exception("ConfigDictionary is null");
-        }
-
-        GlobalConfig.Instance.AddConfigFromDictionary(configDictionary);
+        builder.Configuration.AddJsonFile(globalConfigPath, false, true);
 
         return builder;
     }
 
-    public static WebApplicationBuilder AddAllAssemblies(this WebApplicationBuilder builder, string assemblyPrefix = "")
+    public static WebApplicationBuilder AddAllAssembliesByAssemblyPrefix(this WebApplicationBuilder builder, string assemblyPrefix)
     {
-        if (string.IsNullOrEmpty(assemblyPrefix))
-        {
-            assemblyPrefix = builder.Configuration.TryGetConfig<string>("AssemblyPrefix");
-        }
-
-        AssemblyCache.Instance.AddAllAssemblies(assemblyPrefix);
+        AssemblyCache.Instance.AddAllAssembliesByAssemblyPrefix(assemblyPrefix);
 
         return builder;
     }
 
-    public static WebApplicationBuilder InstallServices(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddAssembliesByAssemblyNames(this WebApplicationBuilder builder, List<string> assemblyNames)
     {
-        builder.Services.InstallServices(builder.Configuration, AssemblyCache.Instance.GetAddedAssemblies());
+        AssemblyCache.Instance.AddAssembliesByAssemblyNames(assemblyNames);
+
+        return builder;
+    }
+
+    public static WebApplicationBuilder InstallServices(this WebApplicationBuilder builder, List<Assembly> assemblies)
+    {
+        builder.Services.InstallServices(builder.Configuration, assemblies);
+        return builder;
+    }
+
+    public static WebApplicationBuilder InstallServices(this WebApplicationBuilder builder, params Assembly[] assemblies)
+    {
+        builder.Services.InstallServices(builder.Configuration, assemblies);
         return builder;
     }
 }

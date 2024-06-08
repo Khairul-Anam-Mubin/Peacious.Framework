@@ -30,7 +30,7 @@ public sealed class AssemblyCache
         _assemblyLists = new();
     }
 
-    public AssemblyCache AddAllAssemblies(string assemblyPrefix)
+    public AssemblyCache AddAllAssembliesByAssemblyPrefix(string assemblyPrefix)
     {
         var entryAssemblyLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
 
@@ -67,13 +67,34 @@ public sealed class AssemblyCache
                 var assemblyName = Path.GetFileNameWithoutExtension(file);
                 if (string.IsNullOrEmpty(assemblyName)) continue;
 
-                var assembly = Assembly.Load(assemblyName);
-                AddAssembly(assembly);
+                AddAssemblyByAssemblyName(assemblyName);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+        }
+
+        return this;
+    }
+
+    public AssemblyCache AddAssembliesByAssemblyNames(List<string> assemblyNames)
+    {
+        assemblyNames.ForEach(assemblyName => AddAssemblyByAssemblyName(assemblyName));
+        return this;
+    }
+
+    public AssemblyCache AddAssemblyByAssemblyName(string assemblyName)
+    {
+        try
+        {
+            var assembly = Assembly.Load(assemblyName);
+
+            return AddAssembly(assembly);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
 
         return this;
