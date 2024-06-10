@@ -7,12 +7,12 @@ namespace Peacious.Framework.DDD;
 public abstract class RepositoryBaseWrapper<T> : RepositoryBase<T>
     where T : class, IEntity, IRepositoryItem
 {
-    protected readonly IEventService EventService;
+    protected readonly IEventExecutor EventExecutor;
 
-    protected RepositoryBaseWrapper(DatabaseInfo databaseInfo, IDbContext dbContext, IEventService eventService)
+    protected RepositoryBaseWrapper(DatabaseInfo databaseInfo, IDbContext dbContext, IEventExecutor eventExecutor)
         : base(databaseInfo, dbContext)
     {
-        EventService = eventService;
+        EventExecutor = eventExecutor;
     }
 
     public override async Task<bool> SaveAsync(T entity)
@@ -55,7 +55,7 @@ public abstract class RepositoryBaseWrapper<T> : RepositoryBase<T>
 
         domainEvents.ForEach(domainEvent =>
         {
-            var task = EventService.PublishEventAsync(domainEvent);
+            var task = EventExecutor.PublishAsync(domainEvent);
 
             tasks.Add(task);
         });

@@ -25,7 +25,7 @@ public static class DependencyInjection
         services.AddTransient<IIndexManager, MongoDbIndexManager>();
         services.AddSingleton<MongoDbContext>();
         services.AddTransient<IDbContextFactory, DbContextFactory>();
-        services.AddSingleton<IUnitOfWork, UnitOfWork>();
+        //services.AddSingleton<IUnitOfWork, UnitOfWork>();
         return services;
     }
 
