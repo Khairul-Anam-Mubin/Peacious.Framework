@@ -3,31 +3,29 @@ using Peacious.Framework.Extensions;
 
 namespace Peacious.Framework;
 
-public sealed class GlobalConfig
+public sealed class DynamicConfig
 {
     private static readonly object LockObj = new();
-    private static GlobalConfig? _instance;
+    private static DynamicConfig? _instance;
 
-    public static GlobalConfig Instance
+    public static DynamicConfig Instance
     {
         get
         {
-            if (_instance == null)
+            if (_instance is not null) return _instance;
+            lock (LockObj)
             {
-                lock (LockObj)
-                {
-                    _instance ??= new GlobalConfig();
-                }
+                _instance ??= new DynamicConfig();
             }
             return _instance;
         }
     }
 
-    private readonly ConcurrentDictionary<string, object> _globalConfig;
+    private readonly ConcurrentDictionary<string, object> _dynamicConfig;
 
-    private GlobalConfig()
+    private DynamicConfig()
     {
-        _globalConfig = new ConcurrentDictionary<string, object>();
+        _dynamicConfig = new ConcurrentDictionary<string, object>();
     }
 
     public void AddConfigFromPath(string configPath)
@@ -88,14 +86,14 @@ public sealed class GlobalConfig
     {
         if (string.IsNullOrEmpty(key)) return;
 
-        _globalConfig.TryAdd(key, value);
+        _dynamicConfig.TryAdd(key, value);
     }
 
     public T? GetConfig<T>(string key)
     {
         if (string.IsNullOrEmpty(key)) return default;
 
-        _globalConfig.TryGetValue(key, out var value);
+        _dynamicConfig.TryGetValue(key, out var value);
 
         return value.SmartCast<T>();
     }

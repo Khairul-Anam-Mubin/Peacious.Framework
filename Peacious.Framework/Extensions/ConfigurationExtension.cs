@@ -8,7 +8,7 @@ public static class ConfigurationExtension
     {
         var config = configuration.GetSection(key).Get<T>();
 
-        return config is null ? GlobalConfig.Instance.GetConfig<T>(key) : config;
+        return config is null ? DynamicConfig.Instance.GetConfig<T>(key) : config;
     }
 
     public static T? GetConfig<T>(this IConfiguration configuration)
