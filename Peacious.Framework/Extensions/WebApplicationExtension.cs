@@ -2,64 +2,61 @@
 using Microsoft.Extensions.DependencyInjection;
 using Peacious.Framework.Interfaces;
 using Peacious.Framework.ORM.Interfaces;
+using Peacious.Framework.ORM.Migrations;
 
 namespace Peacious.Framework.Extensions;
 
 public static class WebApplicationExtension
 {
-    public static WebApplication DoCreateIndexes(this WebApplication application, bool doCreateIndexes = false)
+    public static WebApplication DoCreateIndexes(this WebApplication application, bool doCreateIndexes)
     {
-        if (doCreateIndexes == false)
+        if (!doCreateIndexes) return application;
+
+        var indexCreators = application.Services.GetServices<IIndexCreator>().ToList();
+
+        Console.WriteLine($"Index Creation Started. IndexCreator Found : {indexCreators.Count}");
+
+        indexCreators.ForEach(indexCreator =>
         {
-            doCreateIndexes = application.Configuration.GetConfig<bool>("EnableIndexCreation");
-        }
+            indexCreator.CreateIndexes();
+        });
 
-        if (doCreateIndexes)
-        {
-            var indexCreators = application.Services.GetServices<IIndexCreator>().ToList();
-
-            Console.WriteLine($"Index Creation Started. IndexCreator Found : {indexCreators.Count}");
-
-            indexCreators.ForEach(indexCreator =>
-            {
-                indexCreator.CreateIndexes();
-            });
-        }
         return application;
     }
 
-    public static WebApplication DoMigration(this WebApplication application, bool doMigration = false)
+    public static WebApplication DoMigration(this WebApplication application, MigrationConfig migrationConfig)
     {
-        if (doMigration == false)
+        if (!migrationConfig.Enabled)
         {
-            doMigration = application.Configuration.GetConfig<bool>("EnableMigration");
+            Console.WriteLine($"Migration Job Disabled.");
+            return application;
         }
 
-        if (doMigration)
+        Console.WriteLine($"Migrations Starting...");
+
+        var enabledMigrationJobs =
+            migrationConfig.MigrationJobs
+            .Where(job => job.Enabled)
+            .OrderBy(job => job.Order)
+            .ToList();
+
+        Console.WriteLine($"Enabled Migration Jobs Found : {enabledMigrationJobs.Count}");
+
+        using var scope = application.Services.CreateScope();
+
+        enabledMigrationJobs.ForEach(enabledMigrationJob =>
         {
-            var enabledMigrationJobs = application.Configuration.GetConfig<List<string>>("MigrationJobs");
+            var migraionJob =
+                scope.ServiceProvider.GetRequiredKeyedService<IMigrationJob>(enabledMigrationJob.Name);
 
-            if (enabledMigrationJobs is null)
-            {
-                return application;
-            }
+            Console.WriteLine($"Start Migrations of : {enabledMigrationJob.Name}");
 
-            using var scope = application.Services.CreateScope();
+            migraionJob.MigrateAsync().Wait();
 
-            var migrationJobs = scope.ServiceProvider.GetServices<IMigrationJob>()
-                .Where(job => enabledMigrationJobs.Contains(job.GetType().Name))
-                .ToList();
+            Console.WriteLine($"Done Migrations of : {enabledMigrationJob.Name}");
+        });
 
-            // enabled entry order wise migrations..
-            enabledMigrationJobs.ForEach(enabledMigrationJob =>
-            {
-                var migrationJob = migrationJobs.FirstOrDefault(x => x.GetType().Name == enabledMigrationJob);
-
-                if (migrationJob is null) return;
-
-                migrationJob.MigrateAsync().Wait();
-            });
-        }
+        Console.WriteLine($"Migrations Ended...");
 
         return application;
     }
@@ -68,19 +65,29 @@ public static class WebApplicationExtension
     {
         var initialServices = app.Services.GetServices<IInitialService>().ToList();
 
-        Console.WriteLine($"Start Running Initial Services. Initial Services found: {initialServices.Count}\n");
+        Console.WriteLine($"Start Executing All Initial Services. Initial Services found: {initialServices.Count}.\n");
+
+        var executedCount = 0;
 
         foreach (var initialService in initialServices)
         {
             try
             {
+                Console.WriteLine($"Initial Service : {initialService.GetType().Name} Start Executing.");
+                
                 initialService.InitializeAsync().Wait();
+                
+                Console.WriteLine($"Initial Service : {initialService.GetType().Name} Executed Successfully.");
+
+                executedCount++;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
         }
+        
+        Console.WriteLine($"Executed {executedCount} Initial Services Successfully.");
 
         return app;
     }

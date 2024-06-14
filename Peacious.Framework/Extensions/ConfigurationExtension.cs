@@ -11,18 +11,6 @@ public static class ConfigurationExtension
         return config is null ? DynamicConfig.Instance.GetConfig<T>(key) : config;
     }
 
-    public static T? GetConfig<T>(this IConfiguration configuration)
-    {
-        var key = typeof(T).Name;
-        return configuration.GetConfig<T>(key);
-    }
-
-    public static T TryGetConfig<T>(this IConfiguration configuration)
-    {
-        var key = typeof(T).Name;
-        return configuration.GetConfig<T>(key) ?? throw new Exception("Config null");
-    }
-
     public static T TryGetConfig<T>(this IConfiguration configuration, string key)
     {
         return configuration.GetConfig<T>(key) ?? throw new Exception("Config null");

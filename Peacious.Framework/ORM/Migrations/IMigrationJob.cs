@@ -1,4 +1,4 @@
-﻿namespace Peacious.Framework.ORM.Interfaces;
+﻿namespace Peacious.Framework.ORM.Migrations;
 
 public interface IMigrationJob
 {

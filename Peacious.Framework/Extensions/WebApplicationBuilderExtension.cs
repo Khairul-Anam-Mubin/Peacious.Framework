@@ -8,14 +8,14 @@ namespace Peacious.Framework.Extensions;
 
 public static class WebApplicationBuilderExtension
 {
-    public static WebApplicationBuilder AddGlobalConfig(this WebApplicationBuilder builder, string globalConfigPath)
+    public static WebApplicationBuilder AddCustomConfigurationJsonFile(this WebApplicationBuilder builder, string jsonFilePath)
     {
-        if (string.IsNullOrEmpty(globalConfigPath))
+        if (string.IsNullOrEmpty(jsonFilePath))
         {
-            throw new Exception("Global Config Path not found");
+            throw new Exception("Json File Path can not be null or empty.");
         }
 
-        builder.Configuration.AddJsonFile(globalConfigPath, false, true);
+        builder.Configuration.AddJsonFile(jsonFilePath, false, true);
 
         return builder;
     }

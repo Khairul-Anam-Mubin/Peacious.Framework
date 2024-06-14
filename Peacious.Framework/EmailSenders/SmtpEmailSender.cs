@@ -11,7 +11,7 @@ public class SmtpEmailSender : IEmailSender
 
     public SmtpEmailSender(IConfiguration configuration)
     {
-        _emailConfig = configuration.TryGetConfig<EmailConfig>();
+        _emailConfig = configuration.TryGetConfig<EmailConfig>("EmailConfig");
     }
 
     public async Task SendAsync(Email email)

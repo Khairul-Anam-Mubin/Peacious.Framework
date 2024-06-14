@@ -12,9 +12,8 @@ namespace Peacious.Framework.DDD;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDDD(this IServiceCollection services, List<Assembly> assemblies)
+    public static IServiceCollection AddDDD(this IServiceCollection services)
     {
-        services.AddMediator(assemblies);
         services.AddTransient<IEventExecutor, EventExecutor>();
         return services;
     }

@@ -13,11 +13,9 @@ public static class DependencyInjection
     {
         services.AddMediatR(cfg =>
         {
-            assemblies
-            .ForEach(
-                assembly => cfg.RegisterServicesFromAssembly(assembly));
+            cfg.RegisterServicesFromAssemblies(assemblies.ToArray());
         });
-
+        
         return services.AddTransient<IMediator, Mediator>();
     }
 
