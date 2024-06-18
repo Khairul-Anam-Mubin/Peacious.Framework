@@ -2,9 +2,9 @@
 
 public class TokenConfig
 {
-    public string Issuer { get; set; } = string.Empty;
-    public string Audience { get; set; } = string.Empty;
-    public string SecretKey { get; set; } = string.Empty;
+    public required string Issuer { get; set; }
+    public required string Audience { get; set; }
+    public required string SecretKey { get; set; }
     public int ExpirationTimeInSec { get; set; }
     public int RefreshTokenExpirationTimeInSec { get; set; }
 }

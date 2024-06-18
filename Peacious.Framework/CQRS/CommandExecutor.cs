@@ -18,7 +18,7 @@ public class CommandExecutor : ICommandExecutor
     {
         var validationResult = command.GetValidationResult();
 
-        if (!validationResult.IsSuccess)
+        if (!validationResult.IsSuccess())
         {
             return validationResult;
         }
@@ -37,13 +37,12 @@ public class CommandExecutor : ICommandExecutor
         }
     }
 
-    public async Task<IResult<TResponse>> ExecuteAsync<TCommand, TResponse>(TCommand command)
-        where TCommand : class, ICommand<TResponse>
+    public async Task<IResult<TResponse>> ExecuteAsync<TResponse>(ICommand<TResponse> command)
         where TResponse : class
     {
         var validationResult = command.GetValidationResult<TResponse>();
 
-        if (!validationResult.IsSuccess)
+        if (!validationResult.IsSuccess())
         {
             return validationResult;
         }

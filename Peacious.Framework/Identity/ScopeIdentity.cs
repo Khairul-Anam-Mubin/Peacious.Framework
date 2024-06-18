@@ -36,7 +36,7 @@ public class ScopeIdentity : IScopeIdentity
         {
             return AccessToken;
         }
-
+        
         return _httpContextAccessor.HttpContext?.GetAccessToken();
     }
 

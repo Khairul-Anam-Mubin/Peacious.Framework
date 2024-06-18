@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Peacious.Framework.Mediators;
 using Peacious.Framework.MessageBrokers;
 using System.Reflection;
 

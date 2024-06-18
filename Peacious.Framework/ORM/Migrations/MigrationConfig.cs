@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Peacious.Framework.ORM.Migrations;
+﻿namespace Peacious.Framework.ORM.Migrations;
 
 public class MigrationConfig
 {

@@ -45,12 +45,12 @@ public static class TokenHelper
         return Guid.NewGuid().ToString();
     }
 
-    public static List<Claim> GetClaims(string? accessToken)
+    public static List<Claim> GetClaims(string? jwtToken)
     {
         try
         {
-            accessToken = GetPreparedToken(accessToken);
-            var jwtSecurityToken = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);
+            jwtToken = GetPreparedToken(jwtToken);
+            var jwtSecurityToken = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
             return jwtSecurityToken.Claims.ToList();
         }
         catch (Exception)
@@ -59,18 +59,19 @@ public static class TokenHelper
         }
     }
 
-    public static bool TryValidateToken(string? accessToken, TokenValidationParameters validationParameters, out string validationMessage)
+    public static bool TryValidateToken(string? jwtToken, TokenValidationParameters validationParameters, out string validationMessage)
     {
         try
         {
-            if (string.IsNullOrEmpty(accessToken))
+            if (string.IsNullOrEmpty(jwtToken))
             {
                 throw new Exception("AccessToken not found");
             }
 
-            accessToken = GetPreparedToken(accessToken);
+            jwtToken = GetPreparedToken(jwtToken);
+
             new JwtSecurityTokenHandler()
-                .ValidateToken(accessToken, validationParameters, out var validatedToken);
+                .ValidateToken(jwtToken, validationParameters, out var validatedToken);
 
             validationMessage = "Successfully token validated with the given parameters";
 
@@ -83,12 +84,12 @@ public static class TokenHelper
         }
     }
 
-    public static bool IsExpired(string? accessToken)
+    public static bool IsExpired(string? jwtToken)
     {
         try
         {
-            accessToken = GetPreparedToken(accessToken);
-            var securityToken = new JwtSecurityToken(accessToken);
+            jwtToken = GetPreparedToken(jwtToken);
+            var securityToken = new JwtSecurityToken(jwtToken);
             bool isExpired = securityToken.ValidTo < DateTime.UtcNow;
             return isExpired;
         }
@@ -98,12 +99,12 @@ public static class TokenHelper
         }
     }
 
-    private static string? GetPreparedToken(string? accessToken)
+    private static string? GetPreparedToken(string? jwtToken)
     {
-        if (string.IsNullOrEmpty(accessToken) == false && accessToken.StartsWith("Bearer "))
+        if (string.IsNullOrEmpty(jwtToken) == false && jwtToken.StartsWith("Bearer "))
         {
-            return accessToken.Replace("Bearer ", "");
+            return jwtToken.Replace("Bearer ", "");
         }
-        return accessToken;
+        return jwtToken;
     }
 }

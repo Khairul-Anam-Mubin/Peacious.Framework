@@ -19,7 +19,7 @@ public class QueryExecutor : IQueryExecutor
     {
         var validationResult = query.GetValidationResult<TResponse>();
 
-        if (!validationResult.IsSuccess)
+        if (!validationResult.IsSuccess())
         {
             return validationResult;
         }

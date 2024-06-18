@@ -7,9 +7,9 @@ public interface IResult : IMetaDataDictionary
     string Message { get; }
     ResponseStatus Status { get; }
 
-    bool IsSuccess { get; }
+    bool IsSuccess();
 
-    bool IsFailure { get; }
+    bool IsFailure();
 
     IResult SetMessage(string message);
 }

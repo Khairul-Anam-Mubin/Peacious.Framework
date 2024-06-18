@@ -7,7 +7,6 @@ public interface ICommandExecutor
     Task<IResult> ExecuteAsync<TCommand>(TCommand command)
         where TCommand : class, ICommand;
 
-    Task<IResult<TResponse>> ExecuteAsync<TCommand, TResponse>(TCommand command)
-        where TCommand : class, ICommand<TResponse>
+    Task<IResult<TResponse>> ExecuteAsync<TResponse>(ICommand<TResponse> command)
         where TResponse : class;
 }

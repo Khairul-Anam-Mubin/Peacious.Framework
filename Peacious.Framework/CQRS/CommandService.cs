@@ -36,10 +36,9 @@ public class CommandService : ICommandService
         return await _commandExecutor.ExecuteAsync(command);
     }
 
-    public async Task<IResult<TResponse>> ExecuteAsync<TCommand, TResponse>(TCommand command)
-        where TCommand : class, ICommand<TResponse>
+    public async Task<IResult<TResponse>> ExecuteAsync<TResponse>(ICommand<TResponse> command)
         where TResponse : class
     {
-        return await _commandExecutor.ExecuteAsync<TCommand, TResponse>(command);
+        return await _commandExecutor.ExecuteAsync(command);
     }
 }

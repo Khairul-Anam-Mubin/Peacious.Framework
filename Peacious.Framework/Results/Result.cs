@@ -7,8 +7,8 @@ public class Result : MetaDataDictionary, IResult
     public string Message { get; private set; }
     public ResponseStatus Status { get; }
 
-    public bool IsSuccess => Status == ResponseStatus.Success || Status == ResponseStatus.Pending;
-    public bool IsFailure => !IsSuccess;
+    public bool IsSuccess() => Status == ResponseStatus.Success || Status == ResponseStatus.Pending;
+    public bool IsFailure() => !IsSuccess();
 
     public IResult SetMessage(string message)
     {
