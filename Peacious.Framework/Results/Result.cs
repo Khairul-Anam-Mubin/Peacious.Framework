@@ -56,6 +56,11 @@ public class Result : MetaDataDictionary, IResult
     {
         return Result<TResponse>.Create(default, message, ResponseStatus.Error);
     }
+
+    public static IResult<TResponse> Create<TResponse>(IResult result)
+    {
+        return Result<TResponse>.Create(default, result.Message, result.Status);
+    }
 }
 
 public class Result<TResponse> : Result, IResult<TResponse>
