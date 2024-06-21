@@ -18,7 +18,7 @@ public class CommandExecutor : ICommandExecutor
     {
         var validationResult = command.GetValidationResult();
 
-        if (!validationResult.IsSuccess())
+        if (!validationResult.IsSuccess)
         {
             return validationResult;
         }
@@ -33,7 +33,7 @@ public class CommandExecutor : ICommandExecutor
         {
             Console.WriteLine(e);
 
-            return Result.Error(e.Message);
+            return Error.Failure(e.Message).InResult();
         }
     }
 
@@ -42,7 +42,7 @@ public class CommandExecutor : ICommandExecutor
     {
         var validationResult = command.GetValidationResult<TResponse>();
 
-        if (!validationResult.IsSuccess())
+        if (!validationResult.IsSuccess)
         {
             return validationResult;
         }
@@ -57,7 +57,7 @@ public class CommandExecutor : ICommandExecutor
         {
             Console.WriteLine(e);
 
-            return Result.Error<TResponse>(e.Message);
+            return Error.Failure(e.Message).InResult<TResponse>();
         }
     }
 }

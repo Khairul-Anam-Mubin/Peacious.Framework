@@ -1,17 +1,53 @@
-﻿namespace Peacious.Framework.Results;
+﻿using System.Text.Json.Serialization;
 
-public static class Error
+namespace Peacious.Framework.Results;
+
+public record Error
 {
-    public static IResult Message(string message) => Result.Error(message);
-    public static IResult Empty(string title) => Message($"{title} is empty.");
-    public static IResult NotExist(string entity) => Message($"{entity} not exist.");
-    public static IResult NotFound(string entity) => Message($"{entity} not found.");
-    public static IResult NotSet(string entity) => Message($"{entity} not set.");
-    public static IResult SaveProblem(string entity) => Message($"{entity} Save Problem.");
+    [JsonIgnore]
+    public ErrorType Type { get; init; }
 
-    public static IResult NotExist<T>() => NotExist(typeof(T).Name);
-    public static IResult NotFound<T>() => NotFound(typeof(T).Name);
-    public static IResult NotSet<T>() => NotSet(typeof(T).Name);
-    public static IResult SaveProblem<T>() => SaveProblem(typeof(T).Name);
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Title { get; init; }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Description { get; init; }
+    
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Uri { get; init; }
+
+    private Error(ErrorType type, string? title = null, string? description = null, string? uri = null)
+    {
+        Type = type;
+        Title = title;
+        Description = description;
+        Uri = uri;
+    }
+
+    public static readonly Error None = new Error(ErrorType.None);
+
+    public static Error Validation(string? title = null, string? description = null, string? uri = null)
+    {
+        return new Error(ErrorType.Validation, title, description, uri);    
+    }
+    public static Error NotFound(string? title = null, string? description = null, string? uri = null)
+    {
+        return new Error(ErrorType.NotFound, title, description, uri);    
+    }
+    public static Error Conflict(string? title = null, string? description = null, string? uri = null)
+    {
+        return new Error(ErrorType.Conflict, title, description, uri);
+    }
+    public static Error Failure(string? title = null, string? description = null, string? uri = null)
+    {
+        return new Error(ErrorType.Failure, title, description, uri);
+    }
+    public static Error ServiceUnAvailable(string? title = null, string? description = null, string? uri = null)
+    {
+        return new Error(ErrorType.ServiceUnAvailable, title, description, uri);
+    }
+    public static Error NotImplemented(string? title = null, string? description = null, string? uri = null)
+    {
+        return new Error(ErrorType.NotImplemented, title, description, uri);
+    }
 }

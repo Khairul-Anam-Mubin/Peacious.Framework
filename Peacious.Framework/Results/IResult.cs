@@ -1,17 +1,13 @@
-﻿using Peacious.Framework.Interfaces;
+﻿namespace Peacious.Framework.Results;
 
-namespace Peacious.Framework.Results;
-
-public interface IResult : IMetaDataDictionary
+public interface IResult
 {
-    string Message { get; }
+    Error Error { get; }
+    string? Message { get; }
     ResponseStatus Status { get; }
 
-    bool IsSuccess();
-
-    bool IsFailure();
-
-    IResult SetMessage(string message);
+    bool IsSuccess { get; }
+    bool IsFailure { get; }
 }
 
 public interface IResult<out TResponse> : IResult

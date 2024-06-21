@@ -1,79 +1,82 @@
-﻿using Peacious.Framework.Models;
+﻿using System.Text.Json.Serialization;
 
 namespace Peacious.Framework.Results;
 
-public class Result : MetaDataDictionary, IResult
+public class Result : IResult
 {
-    public string Message { get; private set; }
-    public ResponseStatus Status { get; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Message { get; private set; }
 
-    public bool IsSuccess() => Status == ResponseStatus.Success || Status == ResponseStatus.Pending;
-    public bool IsFailure() => !IsSuccess();
+    public Error Error { get; private set; }
 
-    public IResult SetMessage(string message)
-    {
-        Message = message;
-        return this;
-    }
+    public ResponseStatus Status { get; private set; }
 
-    protected Result(string message, ResponseStatus status)
+    [JsonIgnore]
+    public bool IsSuccess => Status == ResponseStatus.Success;
+
+    [JsonIgnore]
+    public bool IsFailure => Status == ResponseStatus.Error || Status == ResponseStatus.Failed;
+
+    protected Result(ResponseStatus status, Error error, string? message = null)
     {
         Message = message;
         Status = status;
+        Error = error;
     }
 
-    public static IResult Success(string message = "")
+    public static IResult Processing(string? message = null) => new Result(ResponseStatus.Processing, Error.None);
+    public static IResult Pending(string? message = null) => new Result(ResponseStatus.Pending, Error.None);
+    public static IResult Success(string? message = null) => new Result(ResponseStatus.Success, Error.None);
+    public static IResult Failure(Error error)
     {
-        return new Result(message, ResponseStatus.Success);
+        ArgumentNullException.ThrowIfNull(error);
+
+        return new Result(GetFailureResponseStatus(error), error);
     }
 
-    public static IResult Error(string message = "")
+    public static IResult<TResponse> Failure<TResponse>(Error error)
     {
-        return new Result(message, ResponseStatus.Error);
+        ArgumentNullException.ThrowIfNull(error);
+
+        return Result<TResponse>.Create(GetFailureResponseStatus(error), default, error, null);
     }
 
-    public static IResult Ignored(string message = "")
-    {
-        return new Result(message, ResponseStatus.Ignored);
-    }
+    public static IResult<TResponse> Success<TResponse>(TResponse? response, string? message = null)
+        => Result<TResponse>.Create(ResponseStatus.Success, response, Error.None ,message);
 
-    public static IResult<TResponse> Success<TResponse>(TResponse? response, string message = "")
-    {
-        return Result<TResponse>.Create(response, message, ResponseStatus.Success);
-    }
-
-    public static IResult<TResponse> Error<TResponse>(TResponse? response, string message = "")
-    {
-        return Result<TResponse>.Create(response, message, ResponseStatus.Error);
-    }
-
-    public static IResult<TResponse> Success<TResponse>(string message = "")
-    {
-        return Result<TResponse>.Create(default, message, ResponseStatus.Success);
-    }
-
-    public static IResult<TResponse> Error<TResponse>(string message = "")
-    {
-        return Result<TResponse>.Create(default, message, ResponseStatus.Error);
-    }
-
+    public static IResult<TResponse> Success<TResponse>(string? message = null)
+        => Result<TResponse>.Create(ResponseStatus.Success, default, Error.None, message);
+    
     public static IResult<TResponse> Create<TResponse>(IResult result)
+        => Result<TResponse>.Create(result.Status, default, result.Error, result.Message);
+
+    public static IResult Create<TResponse>(IResult<TResponse> result)
+        => new Result(result.Status, result.Error, result.Message);
+
+    private static ResponseStatus GetFailureResponseStatus(Error error)
     {
-        return Result<TResponse>.Create(default, result.Message, result.Status);
+        if (error.Type == ErrorType.Failure || 
+            error.Type == ErrorType.ServiceUnAvailable || 
+            error.Type == ErrorType.NotImplemented)
+        {
+            return ResponseStatus.Failed;
+        }
+
+        return ResponseStatus.Error;
     }
 }
 
 public class Result<TResponse> : Result, IResult<TResponse>
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public TResponse? Value { get; }
 
-    private Result(TResponse? value, string message, ResponseStatus status) : base(message, status)
+    private Result(ResponseStatus status, TResponse? value, Error error, string? message = null) 
+        : base(status, error, message)
     {
         Value = value;
     }
 
-    public static Result<TResponse> Create(TResponse? value, string message, ResponseStatus status)
-    {
-        return new Result<TResponse>(value, message, status);
-    }
+    internal static IResult<TResponse> Create(ResponseStatus status, TResponse? value, Error error, string? message = null)
+        => new Result<TResponse>(status, value, error, message);
 }
