@@ -30,6 +30,10 @@ public record Error
     {
         return new Error(ErrorType.Validation, title, description, uri);    
     }
+    public static Error Unauthorized(string? title = null, string? description = null, string? uri = null)
+    {
+        return new Error(ErrorType.Unauthorized, title, description, uri);
+    }
     public static Error NotFound(string? title = null, string? description = null, string? uri = null)
     {
         return new Error(ErrorType.NotFound, title, description, uri);    
@@ -44,7 +48,7 @@ public record Error
     }
     public static Error ServiceUnAvailable(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.ServiceUnAvailable, title, description, uri);
+        return new Error(ErrorType.ServiceUnavailable, title, description, uri);
     }
     public static Error NotImplemented(string? title = null, string? description = null, string? uri = null)
     {

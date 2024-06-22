@@ -7,6 +7,7 @@ public class Result : IResult
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public string? Message { get; private set; }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Error Error { get; private set; }
 
     public ResponseStatus Status { get; private set; }
@@ -56,7 +57,7 @@ public class Result : IResult
     private static ResponseStatus GetFailureResponseStatus(Error error)
     {
         if (error.Type == ErrorType.Failure || 
-            error.Type == ErrorType.ServiceUnAvailable || 
+            error.Type == ErrorType.ServiceUnavailable || 
             error.Type == ErrorType.NotImplemented)
         {
             return ResponseStatus.Failed;

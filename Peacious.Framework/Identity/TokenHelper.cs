@@ -65,7 +65,7 @@ public static class TokenHelper
         {
             if (string.IsNullOrEmpty(jwtToken))
             {
-                throw new Exception("AccessToken not found");
+                throw new Exception("JwtToken Empty.");
             }
 
             jwtToken = GetPreparedToken(jwtToken);
@@ -73,7 +73,7 @@ public static class TokenHelper
             new JwtSecurityTokenHandler()
                 .ValidateToken(jwtToken, validationParameters, out var validatedToken);
 
-            validationMessage = "Successfully token validated with the given parameters";
+            validationMessage = "Token Validated.";
 
             return true;
         }

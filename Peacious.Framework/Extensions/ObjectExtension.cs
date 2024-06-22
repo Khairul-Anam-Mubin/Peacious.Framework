@@ -98,7 +98,7 @@ public static class ObjectExtension
     {
         if (obj is null)
         {
-            return Error.NotFound($"Object is null").InResult();
+            return Error.NotFound($"Object is null").Result();
         }
 
         var result = new List<ValidationResult>();
@@ -117,7 +117,7 @@ public static class ObjectExtension
             message = string.Empty;
         }
 
-        return Error.Validation(message).InResult();
+        return Error.Validation(message).Result();
     }
 
     public static IResult<TResponse> GetValidationResult<TResponse>(this object? obj)
@@ -126,6 +126,6 @@ public static class ObjectExtension
 
         return result.IsSuccess ?
             Result.Success<TResponse>() :
-            Error.Validation(result.Message).InResult<TResponse>();
+            Error.Validation(result.Message).Result<TResponse>();
     }
 }

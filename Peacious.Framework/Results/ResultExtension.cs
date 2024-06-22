@@ -7,7 +7,7 @@ public static class ResultExtension
     public static IResult ToResult<TResponse>(this IResult<TResponse> result) => Result.Create(result);
     public static IResult<TResponse> ToResult<TResponse>(this IResult result) => Result.Create<TResponse>(result);
 
-    public static ObjectResult ToObjectResult(this IResult result, ErrorResponseType errorResponseType)
+    public static ObjectResult ToObjectResult(this IResult result, ErrorResponseType errorResponseType = ErrorResponseType.Standard)
     {
         return result.Status switch
         {
@@ -19,7 +19,7 @@ public static class ResultExtension
         };
     }
 
-    public static ObjectResult ToObjectResult<TResponse>(this IResult<TResponse> result, ErrorResponseType errorResponseType)
+    public static ObjectResult ToObjectResult<TResponse>(this IResult<TResponse> result, ErrorResponseType errorResponseType = ErrorResponseType.Standard)
     {
         return result.Status switch
         {

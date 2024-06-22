@@ -33,7 +33,7 @@ public class CommandExecutor : ICommandExecutor
         {
             Console.WriteLine(e);
 
-            return Error.Failure(e.Message).InResult();
+            return Error.Failure(e.Message).Result();
         }
     }
 
@@ -57,7 +57,7 @@ public class CommandExecutor : ICommandExecutor
         {
             Console.WriteLine(e);
 
-            return Error.Failure(e.Message).InResult<TResponse>();
+            return Error.Failure(e.Message).Result<TResponse>();
         }
     }
 }

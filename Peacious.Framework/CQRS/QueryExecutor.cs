@@ -34,7 +34,7 @@ public class QueryExecutor : IQueryExecutor
         {
             Console.WriteLine(e.Message);
 
-            return Error.Failure(e.Message).InResult<TResponse>();
+            return Error.Failure(e.Message).Result<TResponse>();
         }
     }
 }

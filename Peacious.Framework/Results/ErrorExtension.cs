@@ -4,15 +4,15 @@ namespace Peacious.Framework.Results;
 
 public static class ErrorExtension
 {
-    public static IResult InResult(this Error error) => Result.Failure(error);
-    public static IResult<TResponse> InResult<TResponse>(this Error error) => Result.Failure<TResponse>(error);
+    public static IResult Result(this Error error) => Results.Result.Failure(error);
+    public static IResult<TResponse> Result<TResponse>(this Error error) => Results.Result.Failure<TResponse>(error);
 
-    public static ObjectResult ToObjectResult(this Error error, ErrorResponseType errorResponseType)
+    public static ObjectResult ToObjectResult(this Error error, ErrorResponseType errorResponseType = ErrorResponseType.Standard)
     {
         return errorResponseType switch
         {
-            ErrorResponseType.Standard => new ObjectResult(error.ToProblemDetails()),
-            ErrorResponseType.OAuth2Error => new ObjectResult(error.ToOAuth2ErrorResponse()),
+            ErrorResponseType.Standard => new ObjectResult(error.ToProblemDetails()) { StatusCode = GetStatusCode(error.Type)},
+            ErrorResponseType.OAuth2Error => new ObjectResult(error.ToOAuth2ErrorResponse()) { StatusCode = GetStatusCode(error.Type) },
             _ => new ObjectResult(error) { StatusCode = GetStatusCode(error.Type) },
         };
     }
@@ -43,11 +43,12 @@ public static class ErrorExtension
         return type switch
         {
             ErrorType.Validation => 400,
+            ErrorType.Unauthorized => 401,
             ErrorType.NotFound => 404,
             ErrorType.Conflict => 409,
             ErrorType.Failure => 500,
             ErrorType.NotImplemented => 501,
-            ErrorType.ServiceUnAvailable => 503,
+            ErrorType.ServiceUnavailable => 503,
             _ => 500,
         };
     }
