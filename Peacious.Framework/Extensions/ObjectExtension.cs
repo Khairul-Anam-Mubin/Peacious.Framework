@@ -124,8 +124,6 @@ public static class ObjectExtension
     {
         var result = obj.GetValidationResult();
 
-        return result.IsSuccess ?
-            Result.Success<TResponse>() :
-            Error.Validation(result.Message).Result<TResponse>();
+        return result.ToResult<TResponse>();
     }
 }

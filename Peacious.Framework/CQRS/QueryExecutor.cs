@@ -19,7 +19,7 @@ public class QueryExecutor : IQueryExecutor
     {
         var validationResult = query.GetValidationResult<TResponse>();
 
-        if (!validationResult.IsSuccess)
+        if (validationResult.IsFailure)
         {
             return validationResult;
         }
@@ -34,7 +34,7 @@ public class QueryExecutor : IQueryExecutor
         {
             Console.WriteLine(e.Message);
 
-            return Error.Failure(e.Message).Result<TResponse>();
+            return Error.Failure("Execution failed", e.Message).Result<TResponse>();
         }
     }
 }

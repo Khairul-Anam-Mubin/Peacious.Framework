@@ -33,7 +33,7 @@ public class CommandExecutor : ICommandExecutor
         {
             Console.WriteLine(e);
 
-            return Error.Failure(e.Message).Result();
+            return Error.Failure("Execution failed", e.Message).Result();
         }
     }
 
@@ -42,7 +42,7 @@ public class CommandExecutor : ICommandExecutor
     {
         var validationResult = command.GetValidationResult<TResponse>();
 
-        if (!validationResult.IsSuccess)
+        if (validationResult.IsFailure)
         {
             return validationResult;
         }
@@ -57,7 +57,7 @@ public class CommandExecutor : ICommandExecutor
         {
             Console.WriteLine(e);
 
-            return Error.Failure(e.Message).Result<TResponse>();
+            return Error.Failure("Execution failed", e.Message).Result<TResponse>();
         }
     }
 }
