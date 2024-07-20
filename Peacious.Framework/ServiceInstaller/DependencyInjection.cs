@@ -10,12 +10,6 @@ public static class DependencyInjection
     public static IServiceCollection InstallServices(this IServiceCollection services,
         IConfiguration configuration, params Assembly[] assemblies)
     {
-        return services.InstallServices(configuration, assemblies.ToList());
-    }
-
-    public static IServiceCollection InstallServices(this IServiceCollection services,
-        IConfiguration configuration, List<Assembly> assemblies)
-    {
         foreach (var assembly in assemblies)
         {
             foreach (var type in assembly.GetExportedTypes())

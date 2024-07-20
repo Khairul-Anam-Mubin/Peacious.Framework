@@ -27,16 +27,10 @@ public static class WebApplicationBuilderExtension
         return builder;
     }
 
-    public static WebApplicationBuilder AddAssembliesByAssemblyNames(this WebApplicationBuilder builder, List<string> assemblyNames)
+    public static WebApplicationBuilder AddAssembliesByAssemblyNames(this WebApplicationBuilder builder, params string[] assemblyNames)
     {
         AssemblyCache.Instance.AddAssembliesByAssemblyNames(assemblyNames);
 
-        return builder;
-    }
-
-    public static WebApplicationBuilder InstallServices(this WebApplicationBuilder builder, List<Assembly> assemblies)
-    {
-        builder.Services.InstallServices(builder.Configuration, assemblies);
         return builder;
     }
 

@@ -12,22 +12,25 @@ public sealed class AssemblyCache
     {
         get
         {
-            if (_instance == null)
+            if (_instance is not null)
             {
-                lock (LockObj)
-                {
-                    _instance ??= new AssemblyCache();
-                }
+                return _instance;
             }
+
+            lock (LockObj)
+            {
+                _instance ??= new AssemblyCache();
+            }
+            
             return _instance;
         }
     }
 
-    private readonly ConcurrentDictionary<string, Assembly> _assemblyLists;
+    private readonly ConcurrentDictionary<string, Assembly> _assemblyDictionary;
 
     private AssemblyCache()
     {
-        _assemblyLists = new();
+        _assemblyDictionary = new();
     }
 
     public AssemblyCache AddAllAssembliesByAssemblyPrefix(string assemblyPrefix)
@@ -67,7 +70,7 @@ public sealed class AssemblyCache
                 var assemblyName = Path.GetFileNameWithoutExtension(file);
                 if (string.IsNullOrEmpty(assemblyName)) continue;
 
-                AddAssemblyByAssemblyName(assemblyName);
+                AddAssembliesByAssemblyNames(assemblyName);
             }
             catch (Exception e)
             {
@@ -78,23 +81,20 @@ public sealed class AssemblyCache
         return this;
     }
 
-    public AssemblyCache AddAssembliesByAssemblyNames(List<string> assemblyNames)
+    public AssemblyCache AddAssembliesByAssemblyNames(params string[] assemblyNames)
     {
-        assemblyNames.ForEach(assemblyName => AddAssemblyByAssemblyName(assemblyName));
-        return this;
-    }
-
-    public AssemblyCache AddAssemblyByAssemblyName(string assemblyName)
-    {
-        try
+        foreach (var assemblyName in assemblyNames)
         {
-            var assembly = Assembly.Load(assemblyName);
+            try
+            {
+                var assembly = Assembly.Load(assemblyName);
 
-            return AddAssembly(assembly);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+                return AddAssembly(assembly);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         return this;
@@ -102,33 +102,31 @@ public sealed class AssemblyCache
 
     public AssemblyCache AddAssemblies(params Assembly[] assemblies)
     {
-        AddAssemblies(assemblies.ToList());
-        return this;
-    }
+        foreach (var assembly in assemblies)
+        {
+            AddAssembly(assembly);
+        }
 
-    public AssemblyCache AddAssemblies(List<Assembly> assemblies)
-    {
-        assemblies.ForEach(assembly => AddAssembly(assembly));
         return this;
     }
 
     public AssemblyCache AddAssembly(Assembly assembly)
     {
         if (string.IsNullOrEmpty(assembly.FullName) ||
-            _assemblyLists.ContainsKey(assembly.FullName))
+            _assemblyDictionary.ContainsKey(assembly.FullName))
         {
             Console.WriteLine($"{assembly.FullName} already added\n");
             return this;
         }
 
-        _assemblyLists.TryAdd(assembly.FullName, assembly);
+        _assemblyDictionary.TryAdd(assembly.FullName, assembly);
         Console.WriteLine($"Added Assembly {assembly.FullName}\n");
 
         return this;
     }
 
-    public List<Assembly> GetAddedAssemblies()
+    public Assembly[] GetAddedAssemblies()
     {
-        return _assemblyLists.Values.ToList();
+        return _assemblyDictionary.Values.ToArray();
     }
 }

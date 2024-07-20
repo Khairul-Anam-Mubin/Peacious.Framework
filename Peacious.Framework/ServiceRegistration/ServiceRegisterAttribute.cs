@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Peacious.Framework.Attributes;
+namespace Peacious.Framework.ServiceRegistration;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class ServiceRegisterAttribute : Attribute
@@ -14,22 +14,22 @@ public class ServiceRegisterAttribute : Attribute
         ServiceLifetime = serviceLifetime;
     }
 
-    public ServiceRegisterAttribute(Type serviceType, ServiceLifetime serviceLifeTime)
+    public ServiceRegisterAttribute(ServiceLifetime serviceLifetime, Type serviceType)
     {
+        ServiceLifetime = serviceLifetime;
         ServiceType = serviceType;
-        ServiceLifetime = serviceLifeTime;
     }
 
-    public ServiceRegisterAttribute(string key, ServiceLifetime serviceLifeTime)
+    public ServiceRegisterAttribute(ServiceLifetime serviceLifetime, string key)
     {
+        ServiceLifetime = serviceLifetime;
         Key = key;
-        ServiceLifetime = serviceLifeTime;
     }
 
-    public ServiceRegisterAttribute(string key, Type serviceType, ServiceLifetime serviceLifeTime)
+    public ServiceRegisterAttribute(ServiceLifetime serviceLifetime, Type serviceType, string key)
     {
-        Key = key;
+        ServiceLifetime = serviceLifetime;
         ServiceType = serviceType;
-        ServiceLifetime = serviceLifeTime;
+        Key = key;
     }
 }
