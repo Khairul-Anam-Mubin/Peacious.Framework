@@ -1,34 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Peacious.Framework.Results.Errors.Strategies;
 
 namespace Peacious.Framework.Results.Errors.Adapters;
 
-public class DefaultErrorActionResultAdapter : IErrorActionResultAdapter
+public class DefaultErrorActionResultAdapter(
+    IErrorStatusCodeStrategy errorStatusCodeStrategy) : IErrorActionResultAdapter
 {
-    #region SingletonInstanceCreation
-
-    private static readonly object _lockObject = new();
-    private static IErrorActionResultAdapter? _instance;
-
-    public static IErrorActionResultAdapter Instance
-    {
-        get
-        {
-            if (_instance is not null)
-            {
-                return _instance;
-            }
-            lock (_lockObject)
-            {
-                _instance ??= new DefaultErrorActionResultAdapter();
-            }
-            return _instance;
-        }
-    }
-
-    #endregion
+    private readonly IErrorStatusCodeStrategy _errorStatusCodeStrategy = errorStatusCodeStrategy;
 
     public IActionResult Convert(Error error)
     {
-        return new ObjectResult(error) { StatusCode = StatusCodeProvider.GetStatusCode(error.Type) };
+        return new ObjectResult(error) 
+        { 
+            StatusCode = _errorStatusCodeStrategy.GetErrorStatusCode(error.Type) 
+        };
     }
 }
