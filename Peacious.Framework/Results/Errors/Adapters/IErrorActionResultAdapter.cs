@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Peacious.Framework.Results.ErrorAdapters;
+namespace Peacious.Framework.Results.Errors.Adapters;
 
 public interface IErrorActionResultAdapter
 {

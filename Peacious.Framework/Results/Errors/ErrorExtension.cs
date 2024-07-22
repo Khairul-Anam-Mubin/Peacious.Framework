@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Peacious.Framework.Results.Enums;
-using Peacious.Framework.Results.ErrorAdapters;
-using Peacious.Framework.Results.ErrorFactories;
+using Peacious.Framework.Results.Errors.Adapters;
 
-namespace Peacious.Framework.Results.Extensions;
+namespace Peacious.Framework.Results.Errors;
 
 public static class ErrorExtension
 {

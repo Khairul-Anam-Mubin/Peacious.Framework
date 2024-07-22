@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Peacious.Framework.Results.ErrorAdapters;
+namespace Peacious.Framework.Results.Errors.Adapters;
 
 public class ProblemDetailsErrorActionResultAdapter : IErrorActionResultAdapter
 {
+    #region SingletonInstanceCreation
+
     private static readonly object _lockObject = new();
     private static IErrorActionResultAdapter? _instance;
 
@@ -22,6 +24,8 @@ public class ProblemDetailsErrorActionResultAdapter : IErrorActionResultAdapter
             return _instance;
         }
     }
+
+    #endregion
 
     public IActionResult Convert(Error error)
     {

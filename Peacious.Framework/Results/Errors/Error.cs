@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Peacious.Framework.Results.Enums;
 
-namespace Peacious.Framework.Results;
+namespace Peacious.Framework.Results.Errors;
 
 public record Error
 {
@@ -13,7 +13,7 @@ public record Error
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Description { get; init; }
-    
+
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Uri { get; init; }
 
@@ -25,11 +25,11 @@ public record Error
         Uri = uri;
     }
 
-    public static readonly Error None = new Error(ErrorType.None);
+    public static readonly Error None = new(ErrorType.None);
 
     public static Error Validation(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.Validation, title, description, uri);    
+        return new Error(ErrorType.Validation, title, description, uri);
     }
     public static Error Unauthorized(string? title = null, string? description = null, string? uri = null)
     {
@@ -37,7 +37,7 @@ public record Error
     }
     public static Error NotFound(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.NotFound, title, description, uri);    
+        return new Error(ErrorType.NotFound, title, description, uri);
     }
     public static Error Conflict(string? title = null, string? description = null, string? uri = null)
     {

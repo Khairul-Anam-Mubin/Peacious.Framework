@@ -1,4 +1,5 @@
 ﻿using Peacious.Framework.Results.Enums;
+using Peacious.Framework.Results.Errors;
 
 namespace Peacious.Framework.Results;
 

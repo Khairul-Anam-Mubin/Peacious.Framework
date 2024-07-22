@@ -1,7 +1,7 @@
 ﻿using Peacious.Framework.Extensions;
 using Peacious.Framework.Mediators;
 using Peacious.Framework.Results;
-using Peacious.Framework.Results.Extensions;
+using Peacious.Framework.Results.Errors;
 
 namespace Peacious.Framework.CQRS;
 

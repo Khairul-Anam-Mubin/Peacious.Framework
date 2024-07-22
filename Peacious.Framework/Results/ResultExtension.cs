@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Peacious.Framework.Results.Enums;
-using Peacious.Framework.Results.ErrorAdapters;
-using Peacious.Framework.Results.ErrorFactories;
-using Peacious.Framework.Results.ResultAdapters;
-using Peacious.Framework.Results.ResultFactories;
+using Peacious.Framework.Results.Adapters;
+using Peacious.Framework.Results.Errors.Adapters;
 
-namespace Peacious.Framework.Results.Extensions;
+namespace Peacious.Framework.Results;
 
 public static class ResultExtension
 {

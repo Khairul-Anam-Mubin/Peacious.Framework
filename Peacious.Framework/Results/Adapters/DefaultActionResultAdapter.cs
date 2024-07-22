@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Peacious.Framework.Results.ErrorAdapters;
+using Peacious.Framework.Results.Errors;
+using Peacious.Framework.Results.Errors.Adapters;
 
-namespace Peacious.Framework.Results.ResultAdapters;
+namespace Peacious.Framework.Results.Adapters;
 
 public class DefaultActionResultAdapter : IActionResultAdapter
 {
+    #region SingletonInstanceCreation
+    
     private static readonly object _lockObject = new();
     private static IActionResultAdapter? _instance;
 
@@ -23,7 +26,9 @@ public class DefaultActionResultAdapter : IActionResultAdapter
             return _instance;
         }
     }
-
+    
+    #endregion
+    
     public IActionResult Convert(IResult result, IErrorActionResultAdapter visitor)
     {
         var statusCode = StatusCodeProvider.GetStatusCode(result.Status);
