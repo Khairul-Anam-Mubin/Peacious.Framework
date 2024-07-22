@@ -1,4 +1,6 @@
-﻿namespace Peacious.Framework.Results;
+﻿using Peacious.Framework.Results.Enums;
+
+namespace Peacious.Framework.Results;
 
 public interface IResult
 {

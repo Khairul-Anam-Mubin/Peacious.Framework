@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Peacious.Framework.Results.Enums;
 
 namespace Peacious.Framework.Results;
 
@@ -28,6 +29,7 @@ public class Result : IResult
     public static IResult Processing(string? message = null) => new Result(ResponseStatus.Processing, Error.None);
     public static IResult Pending(string? message = null) => new Result(ResponseStatus.Pending, Error.None);
     public static IResult Success(string? message = null) => new Result(ResponseStatus.Success, Error.None);
+    
     public static IResult Failure(Error error)
     {
         ArgumentNullException.ThrowIfNull(error);

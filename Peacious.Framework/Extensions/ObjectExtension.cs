@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Peacious.Framework.Results;
+using Peacious.Framework.Results.Extensions;
 using StackExchange.Redis;
 
 namespace Peacious.Framework.Extensions;

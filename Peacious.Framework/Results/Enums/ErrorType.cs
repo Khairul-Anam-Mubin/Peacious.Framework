@@ -1,4 +1,4 @@
-﻿namespace Peacious.Framework.Results;
+﻿namespace Peacious.Framework.Results.Enums;
 
 public enum ErrorType
 {

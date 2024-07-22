@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Peacious.Framework.Results.Enums;
 
 namespace Peacious.Framework.Results;
 
