@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using Peacious.Framework.Results.Enums;
+using Peacious.Framework.Results.Constants;
 using Peacious.Framework.Results.Errors;
 
 namespace Peacious.Framework.Results;
@@ -12,15 +12,15 @@ public class Result : IResult
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Error Error { get; private set; }
 
-    public ResponseStatus Status { get; private set; }
+    public string Status { get; private set; }
 
     [JsonIgnore]
-    public bool IsSuccess => Status == ResponseStatus.Success;
+    public bool IsSuccess => Error is null || Error == Error.None;
 
     [JsonIgnore]
-    public bool IsFailure => Status == ResponseStatus.Error || Status == ResponseStatus.Failed;
+    public bool IsFailure => !IsSuccess;
 
-    protected Result(ResponseStatus status, Error error, string? message = null)
+    protected Result(string status, Error error, string? message = null)
     {
         Message = message;
         Status = status;
@@ -57,7 +57,7 @@ public class Result : IResult
     public static IResult Create<TResponse>(IResult<TResponse> result)
         => new Result(result.Status, result.Error, result.Message);
 
-    private static ResponseStatus GetFailureResponseStatus(Error error)
+    private static string GetFailureResponseStatus(Error error)
     {
         if (error.Type == ErrorType.Failure || 
             error.Type == ErrorType.ServiceUnavailable || 
@@ -75,12 +75,12 @@ public class Result<TResponse> : Result, IResult<TResponse>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public TResponse? Value { get; }
 
-    private Result(ResponseStatus status, TResponse? value, Error error, string? message = null) 
+    private Result(string status, TResponse? value, Error error, string? message = null) 
         : base(status, error, message)
     {
         Value = value;
     }
 
-    internal static IResult<TResponse> Create(ResponseStatus status, TResponse? value, Error error, string? message = null)
+    internal static IResult<TResponse> Create(string status, TResponse? value, Error error, string? message = null)
         => new Result<TResponse>(status, value, error, message);
 }

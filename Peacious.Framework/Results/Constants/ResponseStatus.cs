@@ -1,25 +1,25 @@
-namespace Peacious.Framework.Results.Enums;
+namespace Peacious.Framework.Results.Constants;
 
-public enum ResponseStatus
+public class ResponseStatus
 {
     /// <summary>
     /// Request acknowledged and queued for processing.
     /// </summary>
-    Pending = 0,
+    public const string Pending = "Pending";
     /// <summary>
     /// Long running task to process. Client should do polling.
     /// </summary>
-    Processing = 1,
+    public const string Processing = "Processing";
     /// <summary>
     /// Respond successfully 
     /// </summary>
-    Success = 2,
+    public const string Success = "Success";
     /// <summary>
     /// Authorizaiton error, Invalid inputs, validation or violation of business rules error.
     /// </summary>
-    Error = 4,
+    public const string Error = "Error";
     /// <summary>
     /// Server error, any network, db call failure or something bad happens.
     /// </summary>
-    Failed = 5
+    public const string Failed = "Failed";
 }

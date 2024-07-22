@@ -1,5 +1,4 @@
-﻿using Peacious.Framework.Results.Enums;
-using Peacious.Framework.Results.Errors;
+﻿using Peacious.Framework.Results.Errors;
 
 namespace Peacious.Framework.Results;
 
@@ -7,7 +6,7 @@ public interface IResult
 {
     Error Error { get; }
     string? Message { get; }
-    ResponseStatus Status { get; }
+    string Status { get; }
 
     bool IsSuccess { get; }
     bool IsFailure { get; }

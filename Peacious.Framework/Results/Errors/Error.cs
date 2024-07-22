@@ -1,12 +1,12 @@
 ﻿using System.Text.Json.Serialization;
-using Peacious.Framework.Results.Enums;
+using Peacious.Framework.Results.Constants;
 
 namespace Peacious.Framework.Results.Errors;
 
 public record Error
 {
     [JsonIgnore]
-    public ErrorType Type { get; init; }
+    public string Type { get; init; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Title { get; init; }
@@ -17,7 +17,7 @@ public record Error
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Uri { get; init; }
 
-    private Error(ErrorType type, string? title = null, string? description = null, string? uri = null)
+    protected Error(string type, string? title = null, string? description = null, string? uri = null)
     {
         Type = type;
         Title = title;
@@ -26,6 +26,11 @@ public record Error
     }
 
     public static readonly Error None = new(ErrorType.None);
+
+    public static Error Create(string type, string? title = null, string? description = null, string? uri = null)
+    {
+        return new Error(type, title, description, uri);
+    }
 
     public static Error Validation(string? title = null, string? description = null, string? uri = null)
     {
