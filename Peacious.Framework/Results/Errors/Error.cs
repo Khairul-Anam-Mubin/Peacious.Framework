@@ -30,9 +30,6 @@ public record Error
         return new Error(type, title, description, uri);
     }
 
-    /// <summary>
-    /// Null object pattern
-    /// </summary>
     public static readonly Error None = Create(ErrorType.None);
 
     #region DefaultErrors
