@@ -34,7 +34,7 @@ public class DefaultErrorStatusCodeStrategy : IErrorStatusCodeStrategy
             ErrorType.Failure => 500,
             ErrorType.NotImplemented => 501,
             ErrorType.ServiceUnavailable => 503,
-            _ => 500,
+            _ => throw new Exception($"DefaultErrorStatusCodeStrategy failed to convert the error type : {errorType} to error status code"),
         };
     }
 }

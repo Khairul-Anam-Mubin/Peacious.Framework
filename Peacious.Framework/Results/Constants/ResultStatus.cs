@@ -1,6 +1,6 @@
 namespace Peacious.Framework.Results.Constants;
 
-public class ResponseStatus
+public class ResultStatus
 {
     /// <summary>
     /// Request acknowledged and queued for processing.

@@ -23,14 +23,14 @@ public class DefaultStatusCodeStrategy : IStatusCodeStrategy
         }
     }
 
-    public int GetStatusCode(string responseStatus)
+    public int GetStatusCode(string resultStatus)
     {
-        return responseStatus switch
+        return resultStatus switch
         {
-            ResponseStatus.Pending => 100,
-            ResponseStatus.Processing => 102,
-            ResponseStatus.Success => 200,
-            _ => 500
+            ResultStatus.Pending => 100,
+            ResultStatus.Processing => 102,
+            ResultStatus.Success => 200,
+            _ => throw new Exception($"DefaultStatusCodeStrategy failed to convert the result status : {resultStatus} to status code")
         };
     }
 }

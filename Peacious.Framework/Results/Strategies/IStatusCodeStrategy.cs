@@ -2,5 +2,5 @@
 
 public interface IStatusCodeStrategy
 {
-    int GetStatusCode(string responseStatus);
+    int GetStatusCode(string resultStatus);
 }

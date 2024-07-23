@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Peacious.Framework.Results.Errors;
 using Peacious.Framework.Results.Errors.Adapters;
 using Peacious.Framework.Results.Strategies;
 
@@ -12,13 +11,14 @@ public class DefaultActionResultAdapter(
 
     public IActionResult Convert(IResult result, IErrorActionResultAdapter visitor)
     {
-        var statusCode = _statusCodeStrategy.GetStatusCode(result.Status);
-
-        if (statusCode == 500 || result.Error != Error.None || result.IsFailure)
+        if (result.IsFailure)
         {
             return visitor.Convert(result.Error);
         }
 
-        return new ObjectResult(result) { StatusCode = statusCode };
+        return new ObjectResult(result) 
+        { 
+            StatusCode = _statusCodeStrategy.GetStatusCode(result.Status )
+        };
     }
 }

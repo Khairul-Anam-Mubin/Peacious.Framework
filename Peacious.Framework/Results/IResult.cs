@@ -4,9 +4,9 @@ namespace Peacious.Framework.Results;
 
 public interface IResult
 {
+    string Status { get; }
     Error Error { get; }
     string? Message { get; }
-    string Status { get; }
 
     bool IsSuccess { get; }
     bool IsFailure { get; }

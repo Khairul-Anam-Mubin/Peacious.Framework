@@ -25,39 +25,46 @@ public record Error
         Uri = uri;
     }
 
-    public static readonly Error None = new(ErrorType.None);
-
     public static Error Create(string type, string? title = null, string? description = null, string? uri = null)
     {
         return new Error(type, title, description, uri);
     }
 
+    /// <summary>
+    /// Null object pattern
+    /// </summary>
+    public static readonly Error None = Create(ErrorType.None);
+
+    #region DefaultErrors
+
     public static Error Validation(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.Validation, title, description, uri);
+        return Create(ErrorType.Validation, title, description, uri);
     }
     public static Error Unauthorized(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.Unauthorized, title, description, uri);
+        return Create(ErrorType.Unauthorized, title, description, uri);
     }
     public static Error NotFound(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.NotFound, title, description, uri);
+        return Create(ErrorType.NotFound, title, description, uri);
     }
     public static Error Conflict(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.Conflict, title, description, uri);
+        return Create(ErrorType.Conflict, title, description, uri);
     }
     public static Error Failure(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.Failure, title, description, uri);
+        return Create(ErrorType.Failure, title, description, uri);
     }
     public static Error ServiceUnAvailable(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.ServiceUnavailable, title, description, uri);
+        return Create(ErrorType.ServiceUnavailable, title, description, uri);
     }
     public static Error NotImplemented(string? title = null, string? description = null, string? uri = null)
     {
-        return new Error(ErrorType.NotImplemented, title, description, uri);
+        return Create(ErrorType.NotImplemented, title, description, uri);
     }
+
+    #endregion
 }

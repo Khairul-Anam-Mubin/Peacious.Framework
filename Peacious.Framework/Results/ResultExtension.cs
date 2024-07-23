@@ -6,11 +6,13 @@ namespace Peacious.Framework.Results;
 
 public static class ResultExtension
 {
-    public static IResult ToResult<TResponse>(this IResult<TResponse> result) => Result.Create(result);
-    public static IResult<TResponse> ToResult<TResponse>(this IResult result) => Result.Create<TResponse>(result);
-
-    public static IActionResult ToActionResult(this IResult result, IActionResultAdapter actionResultAdapter, IErrorActionResultAdapter errorActionResultAdapter)
-    {
-        return actionResultAdapter.Convert(result, errorActionResultAdapter);
-    }
+    public static IResult ToResult<TResponse>(this IResult<TResponse> result) 
+        => Result.Create(result.Status, result.Error, result.Message);
+    
+    public static IResult<TResponse> ToResult<TResponse>(this IResult result) 
+        => Result<TResponse>.Create(default, result.Status, result.Error, result.Message);
+    
+    public static IActionResult ToActionResult(
+        this IResult result, IActionResultAdapter actionResultAdapter, IErrorActionResultAdapter errorActionResultAdapter)
+        => actionResultAdapter.Convert(result, errorActionResultAdapter);
 }
