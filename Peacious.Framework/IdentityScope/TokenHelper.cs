@@ -54,8 +54,9 @@ public static class TokenHelper
             var jwtSecurityToken = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
             return jwtSecurityToken.Claims.ToList();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             return new List<Claim>();
         }
     }
@@ -94,8 +95,9 @@ public static class TokenHelper
             bool isExpired = securityToken.ValidTo < DateTime.UtcNow;
             return isExpired;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             return false;
         }
     }
