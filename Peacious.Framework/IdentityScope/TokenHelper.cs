@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Peacious.Framework.Identity;
+namespace Peacious.Framework.IdentityScope;
 
 public static class TokenHelper
 {
@@ -23,7 +23,7 @@ public static class TokenHelper
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF32.GetBytes(secretKey));
             var signingCredentials = new SigningCredentials(securityKey, securityAlgorithm);
-            var expiredTime = DateTime.Now.AddSeconds(expiredTimeInSec);
+            var expiredTime = DateTime.UtcNow.AddSeconds(expiredTimeInSec);
             var tokenOptions = new JwtSecurityToken(
                 issuer: issuer,
                 audience: audience,
@@ -34,8 +34,9 @@ public static class TokenHelper
             var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return token;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             return string.Empty;
         }
     }

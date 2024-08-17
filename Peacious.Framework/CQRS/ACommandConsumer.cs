@@ -1,4 +1,4 @@
-﻿using Peacious.Framework.Identity;
+﻿using Peacious.Framework.IdentityScope;
 using Peacious.Framework.MessageBrokers;
 using Peacious.Framework.Results;
 
@@ -10,18 +10,18 @@ public abstract class ACommandConsumer<TCommand, TResponse> :
     where TCommand : class, ICommand<TResponse>, IInternalMessage
     where TResponse : class
 {
-    protected readonly IScopeIdentity ScopeIdentity;
+    protected readonly IIdentityScopeContext IdentityScopeContext;
 
-    protected ACommandConsumer(IScopeIdentity scopeIdentity)
+    protected ACommandConsumer(IIdentityScopeContext identityScopeContext)
     {
-        ScopeIdentity = scopeIdentity;
+        IdentityScopeContext = identityScopeContext;
     }
 
     protected abstract Task<IResult<TResponse>> OnConsumeAsync(TCommand command, IMessageContext<TCommand>? context = null);
 
     public override async Task Consume(IMessageContext<TCommand> context)
     {
-        ScopeIdentity.SwitchIdentity(context.Message.Token);
+        IdentityScopeContext.Initiate(context.Message.Token);
 
         await OnConsumeAsync(context.Message, context);
     }
@@ -42,18 +42,18 @@ public abstract class ACommandConsumer<TCommand> :
     ICommandHandler<TCommand>
     where TCommand : class, ICommand, IInternalMessage
 {
-    protected readonly IScopeIdentity ScopeIdentity;
+    protected readonly IIdentityScopeContext IdentityScopeContext;
 
-    protected ACommandConsumer(IScopeIdentity scopeIdentity)
+    protected ACommandConsumer(IIdentityScopeContext identityScopeContext)
     {
-        ScopeIdentity = scopeIdentity;
+        IdentityScopeContext = identityScopeContext;
     }
 
     protected abstract Task<IResult> OnConsumeAsync(TCommand command, IMessageContext<TCommand>? context = null);
 
     public override async Task Consume(IMessageContext<TCommand> context)
     {
-        ScopeIdentity.SwitchIdentity(context.Message.Token);
+        IdentityScopeContext.Initiate(context.Message.Token);
 
         await OnConsumeAsync(context.Message, context);
     }

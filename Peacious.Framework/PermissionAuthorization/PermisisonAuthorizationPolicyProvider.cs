@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
-namespace Peacious.Framework.Identity;
+namespace Peacious.Framework.PermissionAuthorization;
 
 public class PermisisonAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
 {

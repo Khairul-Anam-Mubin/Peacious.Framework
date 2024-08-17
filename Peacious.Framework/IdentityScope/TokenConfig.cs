@@ -1,4 +1,4 @@
-﻿namespace Peacious.Framework.Identity;
+﻿namespace Peacious.Framework.IdentityScope;
 
 public class TokenConfig
 {

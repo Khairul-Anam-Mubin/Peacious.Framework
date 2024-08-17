@@ -1,5 +1,5 @@
 ﻿using Peacious.Framework.CQRS;
-using Peacious.Framework.Identity;
+using Peacious.Framework.IdentityScope;
 using Peacious.Framework.MessageBrokers;
 
 namespace Peacious.Framework.EDD;
@@ -7,23 +7,23 @@ namespace Peacious.Framework.EDD;
 public class EventService : IEventService
 {
     private readonly IEventBus _eventBus;
-    private readonly IScopeIdentity _scopeIdentity;
+    private readonly IIdentityScopeContext _identityScopeContext;
     private readonly IEventExecutor _eventExecutor;
 
     public EventService(
         IEventBus eventBus,
-        IScopeIdentity scopeIdentity,
+        IIdentityScopeContext scopeIdentity,
         IEventExecutor eventExecutor)
     {
         _eventBus = eventBus;
-        _scopeIdentity = scopeIdentity;
+        _identityScopeContext = scopeIdentity;
         _eventExecutor = eventExecutor;
     }
 
     public async Task PublishIntegrationEventAsync<TEvent>(TEvent @event)
         where TEvent : class, IEvent, IInternalMessage
     {
-        @event.Token = _scopeIdentity.GetToken();
+        @event.Token = _identityScopeContext.Token;
         await _eventBus.PublishAsync(@event);
     }
 

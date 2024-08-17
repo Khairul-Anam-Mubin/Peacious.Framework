@@ -1,4 +1,4 @@
-﻿using Peacious.Framework.Identity;
+﻿using Peacious.Framework.IdentityScope;
 using Peacious.Framework.MessageBrokers;
 using Peacious.Framework.Results;
 
@@ -15,13 +15,13 @@ public class QueryService : IQueryService
 {
     private readonly IQueryExecutor _queryExecutor;
     private readonly IMessageRequestClient _messageRequestClient;
-    private readonly IScopeIdentity _scopeIdentity;
+    private readonly IIdentityScopeContext _identityScopeContext;
 
-    public QueryService(IQueryExecutor queryExecutor, IMessageRequestClient messageRequestClient, IScopeIdentity scopeIdentity)
+    public QueryService(IQueryExecutor queryExecutor, IMessageRequestClient messageRequestClient, IIdentityScopeContext identityScopeContext)
     {
         _queryExecutor = queryExecutor;
         _messageRequestClient = messageRequestClient;
-        _scopeIdentity = scopeIdentity;
+        _identityScopeContext = identityScopeContext;
     }
 
     public async Task<IResult<TResponse>> ExecuteAsync<TQuery, TResponse>(TQuery query)
@@ -35,7 +35,7 @@ public class QueryService : IQueryService
         where TQuery : class, IInternalMessage
         where TResponse : class
     {
-        query.Token = _scopeIdentity.GetToken();
+        query.Token = _identityScopeContext.Token;
         return await _messageRequestClient.GetResponseAsync<TQuery, TResponse>(query);
     }
 }

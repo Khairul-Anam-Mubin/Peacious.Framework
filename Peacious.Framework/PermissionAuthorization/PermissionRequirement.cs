@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace Peacious.Framework.Identity;
+namespace Peacious.Framework.PermissionAuthorization;
 
 public class PermissionRequirement : IAuthorizationRequirement
 {

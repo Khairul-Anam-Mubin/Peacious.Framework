@@ -1,4 +1,4 @@
-﻿using Peacious.Framework.Identity;
+﻿using Peacious.Framework.IdentityScope;
 using Peacious.Framework.MessageBrokers;
 using Peacious.Framework.Results;
 
@@ -10,18 +10,18 @@ public abstract class AQueryConsumer<TQuery, TResponse> :
     where TQuery : class, IQuery<TResponse>, IInternalMessage
     where TResponse : class
 {
-    protected readonly IScopeIdentity ScopeIdentity;
+    protected readonly IIdentityScopeContext IdentityScopeContext;
 
-    protected AQueryConsumer(IScopeIdentity scopeIdentity)
+    protected AQueryConsumer(IIdentityScopeContext identityScopeContext)
     {
-        ScopeIdentity = scopeIdentity;
+        IdentityScopeContext = identityScopeContext;
     }
 
     protected abstract Task<IResult<TResponse>> OnConsumeAsync(TQuery query, IMessageContext<TQuery>? context = null);
 
     public override async Task Consume(IMessageContext<TQuery> context)
     {
-        ScopeIdentity.SwitchIdentity(context.Message.Token);
+        IdentityScopeContext.Initiate(context.Message.Token);
 
         var response = await OnConsumeAsync(context.Message, context);
 

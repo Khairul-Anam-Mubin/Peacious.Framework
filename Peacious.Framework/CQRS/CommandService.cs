@@ -1,4 +1,4 @@
-﻿using Peacious.Framework.Identity;
+﻿using Peacious.Framework.IdentityScope;
 using Peacious.Framework.MessageBrokers;
 using Peacious.Framework.Results;
 
@@ -16,18 +16,18 @@ public class CommandService : ICommandService
 {
     private readonly ICommandExecutor _commandExecutor;
     private readonly ICommandBus _commandBus;
-    private readonly IScopeIdentity _scopeIdentity;
+    private readonly IIdentityScopeContext _identityScopeContext;
 
-    public CommandService(ICommandExecutor commandExecutor, ICommandBus commandBus, IScopeIdentity scopeIdentity)
+    public CommandService(ICommandExecutor commandExecutor, ICommandBus commandBus, IIdentityScopeContext identityScopeContext)
     {
         _commandExecutor = commandExecutor;
         _commandBus = commandBus;
-        _scopeIdentity = scopeIdentity;
+        _identityScopeContext = identityScopeContext;
     }
 
     public async Task SendAsync<TCommand>(TCommand command) where TCommand : class, IInternalMessage
     {
-        command.Token = _scopeIdentity.GetToken();
+        command.Token = _identityScopeContext.Token;
         await _commandBus.SendAsync(command);
     }
 
