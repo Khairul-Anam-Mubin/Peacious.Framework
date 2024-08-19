@@ -10,7 +10,12 @@ public class IdentityScopeContextMiddleware(
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        _currentTokenContext.Initiate(context.GetAccessToken());
+        var accessToken = context.GetAccessToken();
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            _currentTokenContext.Initiate(accessToken);
+        }
 
         await next(context);
     }
