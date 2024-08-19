@@ -5,9 +5,9 @@ namespace Peacious.Framework.PermissionAuthorization;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPermissionAuthorization(this IServiceCollection services, IPermissionProvider permissionProvider)
+    public static IServiceCollection AddPermissionAuthorization(this IServiceCollection services, Type permisionProviderImplementationType)
     {
-        services.AddScoped(typeof(IPermissionProvider), permissionProvider.GetType());
+        services.AddScoped(typeof(IPermissionProvider), permisionProviderImplementationType);
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddSingleton<IAuthorizationPolicyProvider, PermisisonAuthorizationPolicyProvider>();
         return services;

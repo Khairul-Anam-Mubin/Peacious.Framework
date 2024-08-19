@@ -1,23 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Security.Claims;
 
 namespace Peacious.Framework.IdentityScope;
 
 /// <summary>
 /// Provides current scope (Token and Claims) if the user authenticated.
 /// </summary>
-public interface IIdentityScopeContext
+public interface IIdentityScopeContext : IIdentityContext
 {
-    /// <summary>
-    /// Current Token
-    /// </summary>
-    string? Token { get; }
-
-    /// <summary>
-    /// Current Claims parsed from Token
-    /// </summary>
-    List<Claim> Claims { get; }
-
     /// <summary>
     /// Initiator of a scope context. Whenever a scope starts it's have to invoke with the request token. It have to only use once or it will through exception.
     /// </summary>
@@ -29,7 +18,4 @@ public interface IIdentityScopeContext
     /// </summary>
     /// <returns>a IServiceScope and that needs to dispose</returns>
     IServiceScope InitiateNewScopeContext();
-
-    bool HasClaim(string claimType);
-    Claim? GetClaim(string claimType);
 }
