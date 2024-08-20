@@ -46,4 +46,11 @@ public abstract class RepositoryBase<TEntity> : IRepository<TEntity>
     {
         return await DbContext.GetManyAsync<TEntity>(DatabaseInfo);
     }
+
+    public virtual async Task<bool> DeleteManyByIdsAsync(List<string> ids)
+    {
+        var idsFilter = new FilterBuilder<TEntity>().In(entity => entity.Id, ids);
+
+        return await DbContext.DeleteManyAsync<TEntity>(DatabaseInfo, idsFilter);
+    }
 }

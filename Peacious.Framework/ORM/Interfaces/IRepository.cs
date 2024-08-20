@@ -13,4 +13,6 @@ public interface IRepository<TEntity> where TEntity : class, IRepositoryItem
     Task<bool> SaveAsync(List<TEntity> entities);
 
     Task<bool> DeleteByIdAsync(string id);
+
+    Task<bool> DeleteManyByIdsAsync(List<string> ids);
 }
