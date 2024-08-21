@@ -38,4 +38,27 @@ public class QueryExecutor : IQueryExecutor
             return Error.Failure("Execution failed", e.Message).Result<TResponse>();
         }
     }
+
+    public async Task<IResult<TResponse>> ExecuteAsync<TResponse>(IQuery<TResponse> query) where TResponse : class
+    {
+        var validationResult = query.GetValidationResult<TResponse>();
+
+        if (validationResult.IsFailure)
+        {
+            return validationResult;
+        }
+
+        try
+        {
+            var response = await _mediator.SendAsync(query);
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+
+            return Error.Failure("Execution failed", e.Message).Result<TResponse>();
+        }
+    }
 }

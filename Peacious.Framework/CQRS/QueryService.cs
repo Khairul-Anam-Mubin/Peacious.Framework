@@ -31,6 +31,11 @@ public class QueryService : IQueryService
         return await _queryExecutor.ExecuteAsync<TQuery, TResponse>(query);
     }
 
+    public async Task<IResult<TResponse>> ExecuteAsync<TResponse>(IQuery<TResponse> query) where TResponse : class
+    {
+        return await _queryExecutor.ExecuteAsync(query);
+    }
+
     public async Task<TResponse> GetResponseAsync<TQuery, TResponse>(TQuery query)
         where TQuery : class, IInternalMessage
         where TResponse : class
