@@ -14,10 +14,9 @@ public class ProblemDetailsErrorActionResultAdapter(
 
         var problemDetails = new ProblemDetails
         {
-            Title = error.Title,
+            Title = error.Type,
             Status = statusCode,
-            Detail = error.Description,
-            Type = error.Uri
+            Detail = error.Message
         };
 
         return new ObjectResult(problemDetails)

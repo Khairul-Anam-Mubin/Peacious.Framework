@@ -7,11 +7,7 @@ namespace Peacious.Framework.Results;
 public class Result : IResult
 {
     public string Status { get; init; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Error Error { get; init; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public string? Message { get; init; }
 
     [JsonIgnore]

@@ -1,66 +1,60 @@
-﻿using System.Text.Json.Serialization;
-using Peacious.Framework.Results.Constants;
+﻿using Peacious.Framework.Results.Constants;
 
 namespace Peacious.Framework.Results.Errors;
 
 public record Error
 {
-    [JsonIgnore]
+    /// <summary>
+    /// Validation, Authorization, NotFound etc. Can be used to uniquely identify an error.
+    /// </summary>
     public string Type { get; init; }
+    /// <summary>
+    /// Human readable error description / message
+    /// </summary>
+    public string? Message { get; init; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? Title { get; init; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? Description { get; init; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? Uri { get; init; }
-
-    protected Error(string type, string? title = null, string? description = null, string? uri = null)
+    protected Error(string type, string? message)
     {
         Type = type;
-        Title = title;
-        Description = description;
-        Uri = uri;
+        Message = message;
     }
 
-    public static Error Create(string type, string? title = null, string? description = null, string? uri = null)
+    public static Error Create(string type, string? message = null)
     {
-        return new Error(type, title, description, uri);
+        return new Error(type, message);
     }
 
     public static readonly Error None = Create(ErrorType.None);
 
     #region DefaultErrors
 
-    public static Error Validation(string? title = null, string? description = null, string? uri = null)
+    public static Error Validation(string? message)
     {
-        return Create(ErrorType.Validation, title, description, uri);
+        return Create(ErrorType.Validation, message);
     }
-    public static Error Unauthorized(string? title = null, string? description = null, string? uri = null)
+    public static Error Unauthorized(string? message)
     {
-        return Create(ErrorType.Unauthorized, title, description, uri);
+        return Create(ErrorType.Unauthorized, message);
     }
-    public static Error NotFound(string? title = null, string? description = null, string? uri = null)
+    public static Error NotFound(string? message)
     {
-        return Create(ErrorType.NotFound, title, description, uri);
+        return Create(ErrorType.NotFound, message);
     }
-    public static Error Conflict(string? title = null, string? description = null, string? uri = null)
+    public static Error Conflict(string? message)
     {
-        return Create(ErrorType.Conflict, title, description, uri);
+        return Create(ErrorType.Conflict, message);
     }
-    public static Error Failure(string? title = null, string? description = null, string? uri = null)
+    public static Error Failure(string? message)
     {
-        return Create(ErrorType.Failure, title, description, uri);
+        return Create(ErrorType.Failure, message);
     }
-    public static Error ServiceUnAvailable(string? title = null, string? description = null, string? uri = null)
+    public static Error ServiceUnAvailable(string? message)
     {
-        return Create(ErrorType.ServiceUnavailable, title, description, uri);
+        return Create(ErrorType.ServiceUnavailable, message);
     }
-    public static Error NotImplemented(string? title = null, string? description = null, string? uri = null)
+    public static Error NotImplemented(string? message)
     {
-        return Create(ErrorType.NotImplemented, title, description, uri);
+        return Create(ErrorType.NotImplemented, message);
     }
 
     #endregion

@@ -34,7 +34,7 @@ public class CommandExecutor : ICommandExecutor
         {
             Console.WriteLine(e);
 
-            return Error.Failure("Execution failed", e.Message).Result();
+            return Error.Failure(e.Message).Result();
         }
     }
 
@@ -58,7 +58,7 @@ public class CommandExecutor : ICommandExecutor
         {
             Console.WriteLine(e);
 
-            return Error.Failure("Execution failed", e.Message).Result<TResponse>();
+            return Error.Failure(e.Message).Result<TResponse>();
         }
     }
 }

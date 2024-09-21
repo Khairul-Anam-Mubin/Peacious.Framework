@@ -15,11 +15,7 @@ public class ResultStatus
     /// </summary>
     public const string Success = "Success";
     /// <summary>
-    /// Authorizaiton error, Invalid inputs, validation or violation of business rules error.
+    /// Authorizaiton error, Invalid inputs, validation, violation of business rules error, Server error, any network, db call failure or something bad happens.
     /// </summary>
     public const string Error = "Error";
-    /// <summary>
-    /// Server error, any network, db call failure or something bad happens.
-    /// </summary>
-    public const string Failed = "Failed";
 }

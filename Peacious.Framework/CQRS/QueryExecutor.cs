@@ -35,7 +35,7 @@ public class QueryExecutor : IQueryExecutor
         {
             Console.WriteLine(e.Message);
 
-            return Error.Failure("Execution failed", e.Message).Result<TResponse>();
+            return Error.Failure(e.Message).Result<TResponse>();
         }
     }
 
@@ -58,7 +58,7 @@ public class QueryExecutor : IQueryExecutor
         {
             Console.WriteLine(e.Message);
 
-            return Error.Failure("Execution failed", e.Message).Result<TResponse>();
+            return Error.Failure(e.Message).Result<TResponse>();
         }
     }
 }
