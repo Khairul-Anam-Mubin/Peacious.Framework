@@ -39,6 +39,8 @@ public class MongoDbContext : IDbContext
 
     public async Task<bool> SaveManyAsync<T>(DatabaseInfo databaseInfo, List<T> items) where T : class, IRepositoryItem
     {
+        if (items.Count == 0) return false;
+
         var writeModels = new List<WriteModel<T>>();
 
         foreach (var item in items)
