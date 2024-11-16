@@ -15,4 +15,8 @@ public static class ResultExtension
     public static IActionResult ToActionResult(
         this IResult result, IActionResultAdapter actionResultAdapter, IErrorActionResultAdapter errorActionResultAdapter)
         => actionResultAdapter.Convert(result, errorActionResultAdapter);
+
+    public static IActionResult ToActionResult<TResponse>(
+        this IResult<TResponse> result, IActionResultAdapter actionResultAdapter, IErrorActionResultAdapter errorActionResultAdapter)
+        => actionResultAdapter.Convert(result, errorActionResultAdapter);
 }

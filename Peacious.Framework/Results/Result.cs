@@ -39,9 +39,6 @@ public class Result : IResult
 
     public static IResult<TResponse> Success<TResponse>(TResponse? response, string? message = null)
         => Result<TResponse>.Create(response, ResultStatus.Success, Error.None, message);
-
-    public static IResult<TResponse> Success<TResponse>(string? message = null)
-        => Result<TResponse>.Create(default, ResultStatus.Success, Error.None, message);
     
     #endregion
 }

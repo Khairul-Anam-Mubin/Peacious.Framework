@@ -15,4 +15,6 @@ public interface IActionResultAdapter
     /// Converted IActionResult object
     /// </returns>
     IActionResult Convert(IResult result, IErrorActionResultAdapter visitor);
+
+    IActionResult Convert<TResponse>(IResult<TResponse> result, IErrorActionResultAdapter visitor);
 }

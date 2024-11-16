@@ -21,4 +21,17 @@ public class DefaultActionResultAdapter(
             StatusCode = _statusCodeStrategy.GetStatusCode(result.Status )
         };
     }
+
+    public IActionResult Convert<TResponse>(IResult<TResponse> result, IErrorActionResultAdapter visitor)
+    {
+        if (result.IsFailure)
+        {
+            return visitor.Convert(result.Error);
+        }
+
+        return new ObjectResult(result.Value)
+        {
+            StatusCode = _statusCodeStrategy.GetStatusCode(result.Status)
+        };
+    }
 }
