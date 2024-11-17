@@ -16,12 +16,10 @@ public sealed class AssemblyCache
             {
                 return _instance;
             }
-
             lock (LockObj)
             {
                 _instance ??= new AssemblyCache();
             }
-            
             return _instance;
         }
     }
